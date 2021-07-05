@@ -1,0 +1,45 @@
+<mat-card>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form (submit)="onSavePost()" *ngIf="!isLoading" [formGroup]="form">
+    <mat-form-field>
+      <input matInput type="text" formControlName="title" placeholder="title" />
+      <mat-error *ngIf="form.get('title')?.invalid"
+        >Please Enter Correct Title.</mat-error
+      >
+    </mat-form-field>
+    <div>
+      <!--the fileListener acts as a proxy and its click function
+            is being exexuted by button whose click event bind to input type 
+        file click listener-->
+      <button mat-stroked-button type="button" (click)="fileListener.click()">
+        pick image
+      </button>
+      <!--the event change emit event a dom event which has some value
+            defining the change so we use $event to catch the value that changed-->
+      <input type="file" #fileListener (change)="onImagePicked($event)" />
+    </div>
+    <!--using form.get('property name') and check validation-->
+    <div
+      class="image-preview"
+      *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid"
+    >
+      <img [src]="imagePreview" [alt]="form.value.title" />
+    </div>
+    <mat-form-field>
+      <textarea
+        matInput
+        rows="6"
+        formControlName="description"
+        placeholder="description"
+      >
+      </textarea>
+      <mat-error *ngIf="form.get('description')?.invalid"
+        >Please Enter Correct Description.</mat-error
+      >
+    </mat-form-field>
+    <span>
+      <button mat-raised-button color="accent" type="submit">Save Post</button>
+      <button mat-raised-button color="warn" routerLink="/">Cancel</button>
+    </span>
+  </form>
+</mat-card>
